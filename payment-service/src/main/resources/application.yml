@@ -1,7 +1,7 @@
 server:
   port: 8091
 
-  spring:
+spring:
     kafka:
       bootstrap-servers: ${KAFKA_BROKER:localhost:9092}
       topic:

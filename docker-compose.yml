@@ -14,10 +14,9 @@ services:
     ports:
       - 27017:27017
 
-
   product-db:
-    image: postgres:latest
     container_name: product-db
+    image: postgres:latest
     environment:
       POSTGRES_DB: product-db
       POSTGRES_USER: postgres
@@ -26,11 +25,11 @@ services:
     networks:
       - orchestrator-saga
     ports:
-      - 5432:5432
+      - "5432:5432"
 
   payment-db:
-    image: postgres:latest
     container_name: payment-db
+    image: postgres:latest
     environment:
       POSTGRES_DB: payment-db
       POSTGRES_USER: postgres
@@ -39,11 +38,11 @@ services:
     networks:
       - orchestrator-saga
     ports:
-      - 5433:5432
+      - "5433:5432"
 
   inventory-db:
-    image: postgres:latest
     container_name: inventory-db
+    image: postgres:latest
     environment:
       POSTGRES_DB: inventory-db
       POSTGRES_USER: postgres
@@ -52,7 +51,7 @@ services:
     networks:
       - orchestrator-saga
     ports:
-      - 5434:5432
+      - "5434:5432"
 
   kafka:
     container_name: kafka
