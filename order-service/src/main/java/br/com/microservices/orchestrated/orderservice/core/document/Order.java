@@ -23,5 +23,5 @@ public class Order {
     private LocalDateTime createdAt;
     private String transactionId;
     private double totalAmount;
-    private double totalItems;
+    private int totalItems;
 }
