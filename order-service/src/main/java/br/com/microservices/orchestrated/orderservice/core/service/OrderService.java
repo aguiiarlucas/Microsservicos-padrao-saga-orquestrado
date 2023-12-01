@@ -25,7 +25,7 @@ public class OrderService {
     private final EventService eventService;
     private OrderRepository repository;
 
-    public Order createdOrder(OrderRequest orderRequest) {
+    public Order createOrder(OrderRequest orderRequest) {
         var order = Order.builder()
                 .products(orderRequest.getProducts())
                 .createdAt(LocalDateTime.now())
