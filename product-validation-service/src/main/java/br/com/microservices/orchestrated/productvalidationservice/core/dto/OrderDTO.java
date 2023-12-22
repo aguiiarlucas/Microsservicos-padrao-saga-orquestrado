@@ -12,11 +12,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Order {
+public class OrderDTO {
 
 
     private String id;
-    private List<OrderProduct> products;
+    private List<OrderProductDTO> products;
     private LocalDateTime createdAt;
     private String transactionId;
     private double totalAmount;

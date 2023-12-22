@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderProduct {
+public class OrderProductDTO {
 
-    private Product product;
+    private ProductDTO productDTO;
     private Integer quantity;
 }

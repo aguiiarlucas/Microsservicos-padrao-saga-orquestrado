@@ -1,6 +1,6 @@
 package br.com.microservices.orchestrated.productvalidationservice.core.utils;
 
-import br.com.microservices.orchestrated.productvalidationservice.core.dto.Event;
+import br.com.microservices.orchestrated.productvalidationservice.core.dto.EventDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -24,9 +24,9 @@ public class JsonUtil {
     }
 
 
-    public Event toEvent(String json) {
+    public EventDTO toEvent(String json) {
         try {
-            return objectMapper.readValue(json, Event.class);
+            return objectMapper.readValue(json, EventDTO.class);
         }catch (Exception e){
             return null;
         }

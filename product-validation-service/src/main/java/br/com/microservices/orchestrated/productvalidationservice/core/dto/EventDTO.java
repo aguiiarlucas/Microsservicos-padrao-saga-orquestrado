@@ -8,22 +8,30 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Event {
+public class EventDTO {
 
     private String id;
     private String transactionId;
     private String orderId;
-    private Order payload;
+    private OrderDTO payload;
     private String source;
     private ESagaStatus status;
-    private List<History> eventHistory;
+    private List<HistoryDTO> eventHistoryDTO;
     private LocalDateTime createdAt;
+
+    public void addToHistory(HistoryDTO historyDTO){
+        if(eventHistoryDTO.isEmpty()){
+            eventHistoryDTO = new ArrayList<>();
+        }
+        eventHistoryDTO.add(historyDTO);
+    }
 
 
 }

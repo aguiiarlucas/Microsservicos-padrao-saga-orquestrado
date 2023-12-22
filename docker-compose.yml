@@ -25,7 +25,7 @@ services:
     networks:
       - orchestrator-saga
     ports:
-      - "5432:5432"
+      - 5432:5432
 
   payment-db:
     container_name: payment-db
