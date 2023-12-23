@@ -14,7 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import static br.com.microservices.orchestrated.productvalidationservice.core.enums.ESagaStatus.SUCCESS;
+import static br.com.microservices.orchestrated.productvalidationservice.core.enums.ESagaStatus.*;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Slf4j
@@ -37,11 +37,10 @@ public class ProductValidationService {
             handleSuccess(event);
         } catch (Exception e) {
             log.error("Error trying to validate products", e);
-            handleFailValidation(event);
+            handleFailValidation(event,e.getMessage());
         }
         producer.sendEvent(jsonUtil.toJson(event));
     }
-
 
 
     private void checkCurrentValidation(EventDTO event) {
@@ -79,13 +78,14 @@ public class ProductValidationService {
                 .build();
         validationRepository.save(validation);
     }
+
     private void handleSuccess(EventDTO event) {
-            event.setStatus(SUCCESS);
-            event.setSource(CURRENT_SOURCE);
-            addHistory(event,"Products are validated successfully!");
+        event.setStatus(SUCCESS);
+        event.setSource(CURRENT_SOURCE);
+        addHistory(event, "Products are validated successfully!");
     }
 
-    public void  addHistory(EventDTO event, String message){
+    public void addHistory(EventDTO event, String message) {
         var history = HistoryDTO.builder()
                 .source(event.getSource())
                 .status(event.getStatus())
@@ -95,4 +95,25 @@ public class ProductValidationService {
         event.addToHistory(history);
     }
 
+    private void handleFailValidation(EventDTO event, String message) {
+        event.setStatus(ROLLBACK_PENDING);
+        event.setSource(CURRENT_SOURCE);
+        addHistory(event, "Fail to validate products:".concat(message));
+    }
+
+    public void rollbackEvent(EventDTO event) {
+        changeValidationFail(event);
+        event.setStatus(FAIL);
+        event.setSource(CURRENT_SOURCE);
+        addHistory(event, "Rollback executed on product validation!");
+        producer.sendEvent(jsonUtil.toJson(event));
+    }
+
+    private void changeValidationFail(EventDTO event) {
+        validationRepository.findByOrderIdAndTransactionId(event.getPayload().getId(), event.getTransactionId())
+                .ifPresentOrElse(validation -> {
+                    validation.setSuccess(false);
+                    validationRepository.save(validation);
+                }, () -> createValidation(event, false));
+    }
 }
