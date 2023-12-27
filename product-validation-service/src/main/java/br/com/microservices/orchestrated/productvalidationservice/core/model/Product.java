@@ -9,7 +9,7 @@ import jakarta.persistence.*;
 
 @Data
 @Entity
-@Builder
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "product")
