@@ -4,18 +4,14 @@ import br.com.microservices.orchestrated.productvalidationservice.config.excepti
 import br.com.microservices.orchestrated.productvalidationservice.core.dto.EventDTO;
 import br.com.microservices.orchestrated.productvalidationservice.core.dto.HistoryDTO;
 import br.com.microservices.orchestrated.productvalidationservice.core.dto.OrderProductDTO;
-
-import br.com.microservices.orchestrated.productvalidationservice.core.dto.ProductDTO;
 import br.com.microservices.orchestrated.productvalidationservice.core.model.Validation;
 import br.com.microservices.orchestrated.productvalidationservice.core.producer.KafkaProducer;
 import br.com.microservices.orchestrated.productvalidationservice.core.repository.ProductRepository;
 import br.com.microservices.orchestrated.productvalidationservice.core.repository.ValidationRepository;
 import br.com.microservices.orchestrated.productvalidationservice.core.utils.JsonUtil;
-import jakarta.persistence.criteria.Order;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 
 import java.time.LocalDateTime;
 
@@ -46,7 +42,7 @@ public class ProductValidationService {
         producer.sendEvent(jsonUtil.toJson(event));
     }
 
-    private void validateProductsInformed( EventDTO event) {
+    private void validateProductsInformed(EventDTO event) {
         if (isEmpty(event.getPayload()) || isEmpty(event.getPayload().getProducts())) {
             throw new ValidationException("Product list is empty!");
         }
@@ -54,7 +50,6 @@ public class ProductValidationService {
             throw new ValidationException("OrderID and TransactionID must be informed!");
         }
     }
-
 
     private void checkCurrentValidation(EventDTO event) {
         validateProductsInformed(event);
@@ -68,13 +63,11 @@ public class ProductValidationService {
         });
     }
 
-
-    private void validateProductInformed (OrderProductDTO product) {
+    private void validateProductInformed(OrderProductDTO product) {
         if (isEmpty(product.getProduct()) || isEmpty(product.getProduct().getCode())) {
             throw new ValidationException("Product must be informed!");
         }
     }
-
 
     private void validateExistingProduct(String code) {
         if (!productRepository.existsByCode(code)) {
