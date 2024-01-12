@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Event {
+public class EventDTO {
 
     private String id;
     private String transactionId;
