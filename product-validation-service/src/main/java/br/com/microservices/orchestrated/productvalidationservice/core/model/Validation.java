@@ -23,12 +23,16 @@ public class Validation {
 
     @Column(nullable = false)
     private String orderId;
+
     @Column(nullable = false)
     private String transactionId;
+
     @Column(nullable = false)
     private boolean success;
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
@@ -37,12 +41,10 @@ public class Validation {
         var now = LocalDateTime.now();
         createdAt = now;
         updatedAt = now;
-
     }
 
     @PreUpdate
     public void preUpdate() {
         updatedAt = LocalDateTime.now();
-
     }
 }
