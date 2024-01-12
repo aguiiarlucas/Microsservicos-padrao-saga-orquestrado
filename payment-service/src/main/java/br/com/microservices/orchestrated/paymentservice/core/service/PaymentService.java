@@ -17,7 +17,7 @@ import org.w3c.dom.events.Event;
 
 import java.time.LocalDateTime;
 
-import static br.com.microservices.orchestrated.paymentservice.core.enums.ESagaStatus.SUCCESS;
+import static br.com.microservices.orchestrated.paymentservice.core.enums.ESagaStatus.*;
 
 @Slf4j
 @Service
@@ -34,13 +34,15 @@ public class PaymentService {
 
     public void realizePayment(EventDTO event) {
         try {
-            checkCurrentValidation(event );
+            checkCurrentValidation(event);
             createPendingPayment(event);
             var payment = findByOrderIdAndTransactionId(event);
             validateAmount(payment.getTotalAmount());
             changePaymentSuccess(payment);
         } catch (Exception ex) {
             log.error("Error trying to validate product: ", ex);
+            handleFailCurrentNotExecuted(event, ex.getMessage());
+
         }
         producer.sendEvent(jsonUtil.toJson(event));
 
@@ -97,20 +99,44 @@ public class PaymentService {
                     .concat(MIN_AMOUNT_VALUE.toString()));
         }
     }
-    private void changePaymentSuccess(Payment payment){
+
+    private void changePaymentSuccess(Payment payment) {
         payment.setStatus(EPaymentStatus.SUCCESS);
         save(payment);
     }
+
     private Payment findByOrderIdAndTransactionId(EventDTO event) {
         return paymentRepository
                 .findByOrderIdAndTransactionId(event.getPayload().getId(), event.getPayload().getTransactionId())
                 .orElseThrow(() -> new ValidationException("Payment not found by OrderId and TransactionId"));
     }
+
     private void handleSuccess(EventDTO event) {
         event.setStatus(SUCCESS);
         event.setSource(CURRENT_SOURCE);
         addHistory(event, "Payment realized successfully!");
     }
+
+    private void handleFailCurrentNotExecuted(EventDTO event, String message) {
+        event.setStatus(ROLLBACK_PENDING);
+        event.setSource(CURRENT_SOURCE);
+        addHistory(event, "Fail to realized  payment ".concat(message));
+    }
+
+    public void realizedRefund(EventDTO event) {
+        changePaymentStatusToRefund(event);
+        event.setStatus(FAIL);
+        event.setSource(CURRENT_SOURCE);
+        addHistory(event, "Rollback executed for payment!");
+        producer.sendEvent(jsonUtil.toJson(event));
+    }
+    private void changePaymentStatusToRefund(EventDTO event){
+        var payment = findByOrderIdAndTransactionId(event);
+        payment.setStatus(EPaymentStatus.REFUND);
+        setEventAmountItems(event,payment);
+        save(payment);
+    }
+
     private void addHistory(EventDTO event, String message) {
         var history = HistoryDTO
                 .builder()
