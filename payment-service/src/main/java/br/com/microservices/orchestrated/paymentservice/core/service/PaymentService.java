@@ -34,7 +34,7 @@ public class PaymentService {
 
     public void realizePayment(EventDTO event) {
         try {
-            checkCurrentValidation(event);
+            checkCurrentValidation(event );
             createPendingPayment(event);
             var payment = findByOrderIdAndTransactionId(event);
             validateAmount(payment.getTotalAmount());
