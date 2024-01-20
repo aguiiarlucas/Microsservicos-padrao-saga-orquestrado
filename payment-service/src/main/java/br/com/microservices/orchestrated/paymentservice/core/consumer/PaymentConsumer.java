@@ -1,8 +1,5 @@
 package br.com.microservices.orchestrated.paymentservice.core.consumer;
 
-
-
-
 import br.com.microservices.orchestrated.paymentservice.core.service.PaymentService;
 import br.com.microservices.orchestrated.paymentservice.core.utils.JsonUtil;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +32,6 @@ public class PaymentConsumer {
     public void consumeFailEvent(String payload) {
         log.info("Receiving rollback event {} from payment-fail topic", payload);
         var event = jsonUtil.toEvent(payload);
-        paymentService.realizedRefund(event);
-
+        paymentService.realizeRefund(event);
     }
 }

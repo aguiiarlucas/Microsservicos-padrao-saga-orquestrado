@@ -11,5 +11,8 @@
         <module name="product-validation-service.main" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="payment-service" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>

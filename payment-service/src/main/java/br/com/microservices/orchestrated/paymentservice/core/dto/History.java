@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class HistoryDTO {
+public class History {
 
     private String source;
     private ESagaStatus status;

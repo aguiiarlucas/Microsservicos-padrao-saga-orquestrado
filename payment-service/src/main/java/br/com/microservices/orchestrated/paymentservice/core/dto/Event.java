@@ -17,19 +17,18 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class EventDTO {
+public class Event {
 
     private String id;
-    private String transactionId;
     private String orderId;
+    private String transactionId;
     private Order payload;
     private String source;
     private ESagaStatus status;
-
-    private List<HistoryDTO> eventHistory;
+    private List<History> eventHistory;
     private LocalDateTime createdAt;
 
-    public void addToHistory(HistoryDTO history) {
+    public void addToHistory(History history) {
         if (isEmpty(eventHistory)) {
             eventHistory = new ArrayList<>();
         }

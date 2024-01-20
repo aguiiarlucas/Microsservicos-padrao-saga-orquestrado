@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderProduct {
+public class OrderProducts {
 
     private Product product;
     private Integer quantity;
