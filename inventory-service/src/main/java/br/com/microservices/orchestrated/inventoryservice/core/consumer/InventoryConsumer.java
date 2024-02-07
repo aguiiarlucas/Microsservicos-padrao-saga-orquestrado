@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class InventoryConsumer {
 
-
         private final JsonUtil jsonUtil;
         private final InventoryService inventoryService;
     @KafkaListener(
@@ -21,7 +20,7 @@ public class InventoryConsumer {
             topics = "${spring.kafka.topic.inventory-success}"
     )
     public void consumeSuccessEvent(String payload) {
-        log.info("Receiving event {} from inventory-validation-success topic ", payload);
+        log.info("Receiving success event {} from inventory-success topic", payload);
         var event = jsonUtil.toEvent(payload);
         inventoryService.updateInventory(event);
     }

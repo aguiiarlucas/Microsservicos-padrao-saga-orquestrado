@@ -12,7 +12,6 @@ import br.com.microservices.orchestrated.inventoryservice.core.producer.KafkaPro
 import br.com.microservices.orchestrated.inventoryservice.core.repository.InventoryRepository;
 import br.com.microservices.orchestrated.inventoryservice.core.repository.OrderInventoryRepository;
 import br.com.microservices.orchestrated.inventoryservice.core.utils.JsonUtil;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -83,7 +82,6 @@ public class InventoryService {
     }
 
     private void updateInventory(Order order) {
-
         order
                 .getProducts()
                 .forEach((product -> {

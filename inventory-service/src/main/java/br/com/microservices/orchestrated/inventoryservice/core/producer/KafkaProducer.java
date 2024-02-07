@@ -7,14 +7,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
+
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class KafkaProducer {
+public class KafkaProducer implements Serializable {
 
     private final KafkaTemplate<String, String> kafkaTemplate;
 
-    @Value("${spring.kafka.topic.orchestrator")
+    @Value("${spring.kafka.topic.orchestrator}")
     private String orchestratorTopic;
 
     public void sendEvent(String payload) {
